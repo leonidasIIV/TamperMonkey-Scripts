@@ -6,6 +6,6 @@
 // @author       Kevin Powell
 // @match        http://factoryidle.com/*
 // @grant        none
-// @updateURL    https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/topContainerFix.meta.js
-// @downloadURL  https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/topContainerFix.user.js
+// @updateURL    https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/master/factoryIdle/topContainerFix.meta.js
+// @downloadURL  https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/master/factoryIdle/topContainerFix.user.js
 // ==/UserScript==
