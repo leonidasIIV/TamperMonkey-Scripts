@@ -6,7 +6,7 @@
 // @author       LeonidasIIV
 // @match        https://www.crunchyroll.com/simulcastcalendar*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=crunchyroll.com
-// @grant        none
+// @grant        GM_addStyle
 // @updateURL    https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/master/crunchyroll/CruncyrollSimulcastFilter.meta.js
 // @downloadURL  https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/master/crunchyroll/CruncyrollSimulcastFilter.user.js
 // ==/UserScript==
@@ -42,4 +42,33 @@
 
     // hide our unwanted elements
     badElements.hide();
+
+    // Add Button to Simulcast Header to toggle hiding doubs
+    GM_addStyle(`.mode-filter { border-radius: 0.25rem 0.25rem 0.25rem 0.25rem; }`);
+
+    function onClickDubs(zEvent) {
+        console.log("Entering Click Event for filterDubs");
+        console.log(zEvent);
+        console.log($(this));
+        console.log($("#filterDubs"));
+        if ($(this).hasClass("active")) {
+            $(this).removeClass('active');
+        } else {
+            $(this).addClass('active');
+        }
+        console.log("Leaving Click Event for filterDubs");
+    }
+
+    $("header.simulcast-calendar-header").append(`
+      <div class="simulcast-lineup-toggle">
+        <div class="content">
+          <div class="mode-button mode-filter" id="filterDubs">
+            <div class="mode-button-text"> Dubs </div>
+          </div>
+        </div>
+      </div>
+      `);
+
+    var btnFilter = document.getElementById("filterDubs");
+    btnFilter.addEventListener("click",onClickDubs);
 })();

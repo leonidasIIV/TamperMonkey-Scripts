@@ -6,7 +6,7 @@
 // @author       LeonidasIIV
 // @match        https://www.crunchyroll.com/simulcastcalendar*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=crunchyroll.com
-// @grant        none
+// @grant        GM_addStyle
 // @updateURL    https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/master/crunchyroll/CruncyrollSimulcastFilter.meta.js
 // @downloadURL  https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/master/crunchyroll/CruncyrollSimulcastFilter.user.js
 // ==/UserScript==
