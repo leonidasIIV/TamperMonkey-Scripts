@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         Crunchyroll Simulcast Filter
 // @namespace    https://github.com/leonidasIIV/TamperMonkey-Scripts/crunchyroll
-// @version      0.2
+// @version      0.3
 // @description  filters out dubs items from the crunchyroll simulcast calendar
 // @author       LeonidasIIV
 // @match        https://www.crunchyroll.com/simulcastcalendar*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=crunchyroll.com
+// @require      http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @grant        GM_addStyle
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -49,7 +50,7 @@
   //badElements.hide();
 
   // Add Button to Simulcast Header to toggle hiding doubs
-  GM_addStyle(`.mode-filter { border-radius: 0.25rem 0.25rem 0.25rem 0.25rem; }`);
+  GM_addStyle(`.mode-filter { border-radius: 0.25rem 0.25rem 0.25rem 0.25rem; padding-left: 1.5em !important; padding-right: 1.5em!important; }`);
 
   function onClickDubs(zEvent) {
       //console.log("Entering Click Event for filterDubs");
