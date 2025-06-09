@@ -21,10 +21,29 @@
   'use strict';
 
   // ===========================================================================================
+  // Defines
+  // ===========================================================================================
+  const Filters = Object.freeze({
+    NONE: 'none',              // This is a placeholder value when no filter is selected
+    DUBS: 'dubs',              // This filter is an inverted filter. Inactive hides dubs, active shows dubs
+    QUEUED: 'queued'           // This filter is a normal filter. Inactive shows all entries, active shows only queued entries
+  });
+
+  const LogLevel = Object.freeze({
+    NONE: 0, // Turns off logging. Not meant to be used as a log level
+    CRITICAL: 1,
+    ERROR: 2,
+    WARNING: 3,
+    INFO: 4,
+    DEBUG: 5
+  })
+
+  // ===========================================================================================
   // Configurable values
   // ===========================================================================================
   // write debug information to console
   var debug=true;
+  var debugLevel=LogLevel.ERROR;
 
   // HTML Structure
   // <ol class="releases">
@@ -32,11 +51,6 @@
   //     <article class="release js-release" ... >
   //       <div>
   //         <div class="queue-flag queued" ... >
-  //           <svg viewbox= ... >
-  //             <title>
-  //               In Queue
-  //             </title>
-  //           </svg>
   //         </div>
   //         <h1 class="season-name">
   //           <class="js-season-name-link" ... >
@@ -53,126 +67,144 @@
   var queuedElements = $(".queued").parents("article.release.js-release").parent();
   var unqueuedElements = $("article.release.js-release").parent().filter(":not(:has(.queued))");
 
-  const Filters = Object.freeze({
-      DUBS: 'dubs',              // This filter is an inverted filter. Inactive hides dubs, active shows dubs
-      QUEUED: 'queued'           // This filter is a normal filter. Inactive shows all entries, active shows only queued entries
-  });
-
   // Get our last known state
   var dubsFilterState = GM_getValue("filterDubs", true);
   var queuedFilterState = GM_getValue("filterQueued", true);
 
   // Write our filtered items to our debug output
-  if (debug == true) {
-      console.log("Filtered elements: ");
-      console.log(dubsFilterState);
-      console.log(queuedFilterState);
-      console.log(badElements);
-      console.log(unqueuedElements);
-  }
+  logMessage(LogLevel.DEBUG, "Filtered elements: ");
+  logMessage(LogLevel.DEBUG, dubsFilterState);
+  logMessage(LogLevel.DEBUG, queuedFilterState);
+  logMessage(LogLevel.DEBUG, badElements);
+  logMessage(LogLevel.DEBUG, unqueuedElements);
 
   // Add Button to Simulcast Header to toggle hiding dubs
   GM_addStyle(`.mode-filter { border-radius: 0.25rem 0.25rem 0.25rem 0.25rem; padding-left: 1.5em !important; padding-right: 1.5em !important; }`);
   GM_addStyle(`.filter-button { display: table-cell; padding: 0 0.5em 0 0.5em; }`);
   GM_addStyle(`.filter-button-text {max-width: 100% !important;}`);
 
-  function updateDubsFilter() {
-      var currentElements = [];
-      if (dubsFilterState == true) {
-          // get all currently visible elements
-          currentElements = badElements.filter(":not(':hidden')");
-          // hide only the ones affected by this filter
-          currentElements.hide();
-      } else {
-          // get list of all elements this filter hides
-          currentElements = badElements.filter(":hidden");
-          // show all of the elements this filter hides
-          currentElements.show();
-          // update the other filters
-          updateFilters(Filters.DUBS);
+  function logMessage(level = LogLevel.INFO, message) {
+    if (debug == true && level <= debugLevel) {
+      //var levelName = Object.keys(LogLevel).find((key) => LogLevel[key] === level);
+      switch (level) {
+        case LogLevel.CRITICAL:
+        case LogLevel.ERROR:
+          console.error(message);
+          break;
+        case LogLevel.WARN:
+          console.warn(message);
+          break;
+        case LogLevel.INFO:
+          console.info(message);
+          break;
+        case LogLevel.DEBUG:
+          console.debug(message);
+          break;
+        default:
+          console.log(message);
+          break;
       }
+    }
+  }
+
+  function updateDubsFilter() {
+    logMessage(LogLevel.INFO, "+ updateDubsFilter()");
+    var currentElements = [];
+    if (dubsFilterState == true) {
+      // get all currently visible elements
+      currentElements = badElements.filter(":not(':hidden')");
+      // hide only the ones affected by this filter
+      currentElements.hide();
+    } else {
+      // get list of all elements this filter hides
+      currentElements = badElements.filter(":hidden");
+      // show all of the elements this filter hides
+      currentElements.show();
+      // update the other filters
+      updateFilters(Filters.DUBS);
+    }
+    logMessage(LogLevel.INFO, "- updateDubsFilter()");
   }
 
   function updateQueuedFilter() {
-      var currentElements = [];
-      if (queuedFilterState == true) {
-          // get all elements this filter hides
-          currentElements = unqueuedElements.filter(":hidden");
-          // show all of the elements this filter hides
-          currentElements.show();
-          //console.log(currentElements);
-          // update the other filters
-          updateFilters(Filters.QUEUED);
-      } else {
-          // get all currently visible elements affected by this filter
-          currentElements = unqueuedElements.filter(":not(':hidden')");
-          // hide only the ones affected by this filter
-          currentElements.hide();
-      }
+    logMessage(LogLevel.INFO, "+ updateQueuedFilter()");
+    var currentElements = [];
+    if (queuedFilterState == false) {
+      // get all elements this filter hides
+      currentElements = unqueuedElements.filter(":hidden");
+      // show all of the elements this filter hides
+      currentElements.show();
+      logMessage(LogLevel.DEBUG, currentElements);
+      // update the other filters
+      updateFilters(Filters.QUEUED);
+    } else {
+      // get all currently visible elements affected by this filter
+      currentElements = unqueuedElements.filter(":not(':hidden')");
+      // hide only the ones affected by this filter
+      currentElements.hide();
+    }
+    logMessage(LogLevel.INFO, "- updateQueuedFilter()");
   }
 
-  function updateFilters(caller = "") {
-      if (caller !== Filters.QUEUED) {
-          updateQueuedFilter();
-      }
-      if (caller !== Filters.DUBS) {
-          updateDubsFilter();
-      }
+  function updateFilters(caller = Filters.NONE) {
+    logMessage(LogLevel.INFO, "+ updateFilters()");
+    if (caller !== Filters.QUEUED) {
+      updateQueuedFilter();
+    }
+    if (caller !== Filters.DUBS) {
+      updateDubsFilter();
+    }
+    logMessage(LogLevel.INFO, "- updateFilters()");
   }
 
   function onClickDubs(zEvent) {
-      //console.log("Entering Click Event for filterDubs");
-      //console.log(zEvent);
-      //console.log($(this));
-      //console.log($("#filterDubs"));
-      if ($(this).hasClass("active")) {
-          $(this).removeClass('active');
-          dubsFilterState = true;
-          //badElements.hide();
-      } else {
-          $(this).addClass('active');
-          dubsFilterState = false;
-          //badElements.show();
-      }
-      GM_setValue("filterDubs", dubsFilterState);
-      updateDubsFilter();
-      //console.log("Leaving Click Event for filterDubs");
+    logMessage(LogLevel.INFO, "+ onClickDubs(zEvent)");
+    logMessage(LogLevel.DEBUG, zEvent);
+    logMessage(LogLevel.DEBUG, $(this));
+    logMessage(LogLevel.DEBUG, $("#filterDubs"));
+    if ($(this).hasClass("active")) {
+      $(this).removeClass('active');
+      dubsFilterState = true;
+    } else {
+      $(this).addClass('active');
+      dubsFilterState = false;
+    }
+    GM_setValue("filterDubs", dubsFilterState);
+    updateDubsFilter();
+    logMessage(LogLevel.INFO, "- onClickDubs(zEvent)");
   }
 
   function onClickQueued(zEvent) {
-      //console.log("Entering Click Event for filterQueued");
-      //console.log(zEvent);
-      //console.log($(this));
-      //console.log($("#filterQueued"));
-      if ($(this).hasClass("active")) {
-          $(this).removeClass('active');
-          queuedFilterState = true;
-          //unqueuedElements.show();
-
-      } else {
-          $(this).addClass('active');
-          queuedFilterState = false;
-          //unqueuedElements.hide();
-      }
-      GM_setValue("filterQueued", queuedFilterState);
-      updateQueuedFilter();
-      //console.log("Leaving Click Event for filterQuered");
+    logMessage(LogLevel.INFO, "+ onClickQueued(zEvent)");
+    logMessage(LogLevel.DEBUG, zEvent);
+    logMessage(LogLevel.DEBUG, $(this));
+    logMessage(LogLevel.DEBUG, $("#filterQueued"));
+    if ($(this).hasClass("active")) {
+      $(this).removeClass('active');
+      queuedFilterState = false;
+    } else {
+      $(this).addClass('active');
+      queuedFilterState = true;
+    }
+    GM_setValue("filterQueued", queuedFilterState);
+    updateQueuedFilter();
+    logMessage(LogLevel.INFO, "- onClickQueued(zEvent)");
   }
 
   var cssDubsActive = ""
   if (dubsFilterState) {
-      // if filter is active, hide elements
-      badElements.hide();
+    // if filter is active, hide elements
+    badElements.hide();
   } else {
-      // if filter is inactive, set active style
-      cssDubsActive = " active";
+    // if filter is inactive, set active style
+    cssDubsActive = " active";
   }
 
   // if filter is active, hide elements and set active style
   var cssQueuedActive = ""
   if (queuedFilterState) {
-      unqueuedElements.hide();
-      cssQueuedActive = " active";
+    unqueuedElements.hide();
+    cssQueuedActive = " active";
   }
 
   $("header.simulcast-calendar-header").append(`
