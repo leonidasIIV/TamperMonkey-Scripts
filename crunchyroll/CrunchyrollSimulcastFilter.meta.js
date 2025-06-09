@@ -13,6 +13,7 @@
 // @grant        GM_addStyle
 // @grant        GM_getValue
 // @grant        GM_setValue
-// @updateURL    https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/master/crunchyroll/CruncyrollSimulcastFilter.meta.js
-// @downloadURL  https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/master/crunchyroll/CruncyrollSimulcastFilter.user.js
+// @updateURL    https://raw.githubusercontent.com/leonidasIIV/TamperMonkey-Scripts/refs/heads/master/crunchyroll/CrunchyrollSimulcastFilter.meta.js
+// @downloadURL  https://raw.githubusercontent.com/leonidasIIV/TamperMonkey-Scripts/refs/heads/master/crunchyroll/CrunchyrollSimulcastFilter.user.js
+// @supportURL   https://github.com/leonidasIIV/TamperMonkey-Scripts/issues
 // ==/UserScript==

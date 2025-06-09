@@ -15,6 +15,7 @@
 // @grant        GM_setValue
 // @updateURL    https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/master/crunchyroll/CruncyrollSimulcastFilter.meta.js
 // @downloadURL  https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/master/crunchyroll/CruncyrollSimulcastFilter.user.js
+// @supportURL   https://github.com/leonidasIIV/TamperMonkey-Scripts/issues
 // ==/UserScript==
 
 (function() {
