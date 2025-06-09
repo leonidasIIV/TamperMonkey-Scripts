@@ -5,6 +5,7 @@
 // @description  filters out dubs items from the crunchyroll simulcast calendar
 // @author       LeonidasIIV
 // @match        https://www.crunchyroll.com/simulcastcalendar*
+// @match        https://www.crunchyroll.com/*/simulcastcalendar*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=crunchyroll.com
 // @grant        GM_addStyle
 // @grant        GM_getValue
