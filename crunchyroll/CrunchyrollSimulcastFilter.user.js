@@ -108,7 +108,7 @@
     }
   }
 
-  function updateDubsFilter() {
+  function updateDubsFilter(initial = false) {
     logMessage(LogLevel.INFO, "+ updateDubsFilter()");
     var currentElements = [];
     if (dubsFilterState == true) {
@@ -122,12 +122,14 @@
       // show all of the elements this filter hides
       currentElements.show();
       // update the other filters
-      updateFilters(Filters.DUBS);
+      if (initial == true) {
+        updateFilters(Filters.DUBS);
+      }
     }
     logMessage(LogLevel.INFO, "- updateDubsFilter()");
   }
 
-  function updateQueuedFilter() {
+  function updateQueuedFilter(initial = false) {
     logMessage(LogLevel.INFO, "+ updateQueuedFilter()");
     var currentElements = [];
     if (queuedFilterState == false) {
@@ -137,7 +139,9 @@
       currentElements.show();
       logMessage(LogLevel.DEBUG, currentElements);
       // update the other filters
-      updateFilters(Filters.QUEUED);
+      if (initial == true) {
+        updateFilters(Filters.QUEUED);
+      }
     } else {
       // get all currently visible elements affected by this filter
       currentElements = unqueuedElements.filter(":not(':hidden')");
@@ -171,7 +175,7 @@
       dubsFilterState = false;
     }
     GM_setValue("filterDubs", dubsFilterState);
-    updateDubsFilter();
+    updateDubsFilter(true);
     logMessage(LogLevel.INFO, "- onClickDubs(zEvent)");
   }
 
@@ -188,7 +192,7 @@
       queuedFilterState = true;
     }
     GM_setValue("filterQueued", queuedFilterState);
-    updateQueuedFilter();
+    updateQueuedFilter(true);
     logMessage(LogLevel.INFO, "- onClickQueued(zEvent)");
   }
 
