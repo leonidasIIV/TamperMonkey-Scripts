@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Crunchyroll Simulcast Filter
 // @namespace    https://github.com/leonidasIIV/TamperMonkey-Scripts/crunchyroll
-// @version      0.4
+// @version      0.5
 // @description  filters out dubs items and unqueued items from the crunchyroll simulcast calendar
 // @author       LeonidasIIV
 // @match        https://www.crunchyroll.com/simulcastcalendar
@@ -13,7 +13,7 @@
 // @grant        GM_addStyle
 // @grant        GM_getValue
 // @grant        GM_setValue
-// @updateURL    https://raw.githubusercontent.com/leonidasIIV/TamperMonkey-Scripts/refs/heads/master/crunchyroll/CrunchyrollSimulcastFilter.meta.js
-// @downloadURL  https://raw.githubusercontent.com/leonidasIIV/TamperMonkey-Scripts/refs/heads/master/crunchyroll/CrunchyrollSimulcastFilter.user.js
+// @updateURL    https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/master/crunchyroll/CruncyrollSimulcastFilter.meta.js
+// @downloadURL  https://github.com/leonidasIIV/TamperMonkey-Scripts/raw/master/crunchyroll/CruncyrollSimulcastFilter.user.js
 // @supportURL   https://github.com/leonidasIIV/TamperMonkey-Scripts/issues
 // ==/UserScript==
