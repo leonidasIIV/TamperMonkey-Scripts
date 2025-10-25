@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Crunchyroll Simulcast Filter
 // @namespace    https://github.com/leonidasIIV/TamperMonkey-Scripts/crunchyroll
-// @version      0.5
+// @version      0.6
 // @description  filters out dubs items and unqueued items from the crunchyroll simulcast calendar
 // @author       LeonidasIIV
 // @match        https://www.crunchyroll.com/simulcastcalendar
@@ -37,13 +37,15 @@
     WARNING: 3,
     INFO: 4,
     DEBUG: 5
-  })
+  });
+
+  const dubRegex = /.+ (Season \d+ )?\(.+(Dub)?\)/;
 
   // ===========================================================================================
   // Configurable values
   // ===========================================================================================
   // write debug information to console
-  var debug=true;
+  var debug=false;
   var debugLevel=LogLevel.ERROR;
 
   // HTML Structure
@@ -62,7 +64,7 @@
   var allElements = $("article.release.js-release").parent();
 
   var filteredItems = $("cite:contains('Dub)')").text() + "\r\n";
-  var badElements = $("cite:contains('Dub)')").parents("article.release.js-release").parent();
+  var badElements = $('cite').filter(function() { return dubRegex.test($(this).text()); }).parents("article.release.js-release").parent();
 
   var queuedItems = $(".queued").text() + "\r\n";
   var queuedElements = $(".queued").parents("article.release.js-release").parent();
