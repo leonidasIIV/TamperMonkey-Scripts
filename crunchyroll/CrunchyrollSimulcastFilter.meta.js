@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Crunchyroll Simulcast Filter
 // @namespace    https://github.com/leonidasIIV/TamperMonkey-Scripts/crunchyroll
-// @version      0.5
+// @version      0.6
 // @description  filters out dubs items and unqueued items from the crunchyroll simulcast calendar
 // @author       LeonidasIIV
 // @match        https://www.crunchyroll.com/simulcastcalendar
